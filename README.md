@@ -138,7 +138,7 @@ This will not be a model, but rather will be used as the `reaction` field's subd
 
 ### API Routes
 
-**`/api/users`**
+<!-- **`/api/users`**
 
 * `GET` all users
 
@@ -158,15 +158,15 @@ This will not be a model, but rather will be used as the `reaction` field's subd
 
 * `DELETE` to remove user by its `_id`
 
-**BONUS**: Remove a user's associated thoughts when deleted.
+**BONUS**: Remove a user's associated thoughts when deleted. -->
 
 ---
 
-**`/api/users/:userId/friends/:friendId`**
+<!-- **`/api/users/:userId/friends/:friendId`**
 
 * `POST` to add a new friend to a user's friend list
 
-* `DELETE` to remove a friend from a user's friend list
+* `DELETE` to remove a friend from a user's friend list -->
 
 ---
 
@@ -273,5 +273,3 @@ You are required to submit BOTH of the following for review:
 
 * The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
 
----
-© 2023 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
