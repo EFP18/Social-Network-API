@@ -1,3 +1,4 @@
+const { trusted } = require("mongoose");
 const { User, Thought } = require("../models");
 
 module.exports = {
@@ -14,6 +15,7 @@ module.exports = {
   async getSingleUser(req, res) {
     try {
       const user = await User.findOne({ _id: req.params.userId }).select(
+        // attach property with db version
         "-__v"
       );
 
@@ -37,6 +39,7 @@ module.exports = {
   },
   // Delete a user and associated thoughts
   async deleteUser(req, res) {
+    // recognizes that this method is attached to the delete route in userRoutes.js
     try {
       const user = await User.findOneAndDelete({ _id: req.params.userId });
 
@@ -44,7 +47,8 @@ module.exports = {
         return res.status(404).json({ message: "No user with that ID" });
       }
 
-      await thought.deleteMany({ _id: { $in: user.thoughts } });
+      await Thought.deleteMany({ _id: { $in: user.thoughts } });
+      // delete many in the user's thoughts array
       res.json({ message: "User and associated thoughts deleted!" });
     } catch (err) {
       res.status(500).json(err);
@@ -52,11 +56,51 @@ module.exports = {
   },
   async updateUser(req, res) {
     try {
-      const user = await User.findOneAndUpdate({ _id: req.params.userId });
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $set: req.body },
+        { new: true, runValidators: true }
+      );
 
       if (!user) {
         return res.status(404).json({ message: "No user with that ID" });
       }
+
+      res.json(user);
+      
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
+  async addFriend(req, res) {
+    try {
+      // find the user with that friend
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $push: { friends: req.params.friendId } },
+        // recreate the new version of the user with updated data
+        { new: true }
+      );
+
+      res.json(user);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
+  async removeFriend(req, res) {
+    try {
+      // find the user with that friend
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        // pull removes, vs push that adds in the array of friends
+        { $pull: { friends: req.params.friendId } },
+        // recreate the new version of the user with updated data
+        { new: true }
+      );
+
+      res.json(user);
     } catch (err) {
       res.status(500).json(err);
     }

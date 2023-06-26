@@ -1,5 +1,5 @@
 const { Schema, Types } = require("mongoose");
-const Reaction = require("./Reaction");
+const formatDate = require("../utils/formatDate");
 
 // Schema to create Reaction model
 const reactionSchema = new Schema(
@@ -20,16 +20,16 @@ const reactionSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
+      // gets the timestamp from formatDate.js
+      get: (timestamp) => formatDate(timestamp),
     },
   },
   {
     toJSON: {
-      virtuals: true,
+      getters: true,
     },
     id: false,
   }
 );
-
-
 
 module.exports = reactionSchema;
