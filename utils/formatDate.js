@@ -1,3 +1,5 @@
+// Helper for functionality to format queried timestamps properly.
+
 const addDateSuffix = (date) => {
   let dateStr = date.toString();
 

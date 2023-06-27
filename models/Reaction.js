@@ -1,7 +1,9 @@
+// This is a sub-document, that's why it uses Types instead of Model
+
 const { Schema, Types } = require("mongoose");
 const formatDate = require("../utils/formatDate");
 
-// Schema to create Reaction model
+// Schema to create reaction sub-document
 const reactionSchema = new Schema(
   {
     reactionId: {
