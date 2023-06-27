@@ -5,8 +5,8 @@ module.exports = {
   // Then we return the results as JSON, and catch any errors. Errors are sent as JSON with a message and a 500 status code
   async getThoughts(req, res) {
     try {
-      const Thoughts = await Thought.find();
-      res.json(Thoughts);
+      const thoughts = await Thought.find();
+      res.json(thoughts);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -26,7 +26,7 @@ module.exports = {
     }
   },
   // Creates a new Thought. Accepts a request body with the entire Thought object.
-  // Because Thoughts are associated with Users, we then update the User who created the app and add the ID of the Thought to the Thoughts array
+  // Because Thoughts are associated with Users, we then update the User who created the thought and add the ID of the Thought to the Thoughts array
   async createThought(req, res) {
     try {
       const thoughts = await Thought.create(req.body);
@@ -69,8 +69,8 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Deletes an Thought from the database. Looks for an app by ID.
-  // Then if the app exists, we look for any users associated with the app based on he app ID and update the Thoughts array for the User.
+  // Deletes a thought from the database. Looks for a thought by ID.
+  // Then if the thought exists, we look for any users associated with the thought based on the thought ID and update the thoughts array for the User.
   async deleteThought(req, res) {
     try {
       const thoughts = await Thought.findOneAndRemove({
@@ -83,13 +83,13 @@ module.exports = {
 
       const user = await User.findOneAndUpdate(
         { thoughts: req.params.thoughtId },
-        { $pull: { Thoughts: req.params.thoughtId } },
+        { $pull: { thoughts: req.params.thoughtId } },
         { new: true }
       );
 
       if (!user) {
         return res.status(404).json({
-          message: "Thought created but no user with this id!",
+          message: "Thought deleted but no user with this id!",
         });
       }
 
@@ -116,7 +116,7 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Remove Thought reaction. This method finds the Thought based on ID. It then updates the reactions array associated with the app in question by removing it's reactionId from the reactions array.
+  // Remove Thought reaction. This method finds the Thought based on ID. It then updates the reactions array associated with the thought in question by removing it's reactionId from the reactions array.
   async removeReaction(req, res) {
     try {
       const thought = await Thought.findOneAndUpdate(

@@ -4,10 +4,6 @@ const formatDate = require("../utils/formatDate");
 
 const thoughtsSchema = new Schema(
   {
-    // thoughtsId: {
-    //   type: Schema.Types.ObjectId,
-    //   default: () => new Types.ObjectId(),
-    // },
     thoughtText: {
       type: String,
       required: true,
